@@ -18,6 +18,7 @@ import java.io.Writer;
 import static java.lang.System.in;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.shape.Ellipse;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -177,6 +178,7 @@ public class ImEstatica extends JFrame {
 
                 for (Rect rect : noseDetections.toArray()) {
                     Core.rectangle(image, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(155, 255, 155));
+           
                     noseX = ((rect.x + rect.width) + rect.x) / 2;
                     noseY = ((rect.y + rect.height) + rect.y) / 2;
                     System.out.printf("meio do nariz = %d %d ", noseX, noseY);
