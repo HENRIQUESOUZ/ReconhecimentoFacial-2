@@ -39,6 +39,14 @@ public class FaceDetection extends javax.swing.JFrame {
     private BufferedImage image;
 
     int faceX, faceY, eyeX, eyeY, eyeX1, eyeY1, noseX, noseY, mouthX, mouthY;
+    private double J1;
+    private double J2;
+    private double J3;
+    private double J4;
+    private double J5;
+    private double J6;
+    private double J7;
+    private double J8;
 
     public void paintComponent(Graphics g) {
         paintComponent(g);
@@ -82,7 +90,7 @@ public class FaceDetection extends javax.swing.JFrame {
                             mouthDetector.detectMultiScale(frame, mouthDetections);
                             FileWriter arq = new FileWriter("d:\\rostosDetectados.txt");
                             PrintWriter gravarArq = new PrintWriter(arq);
-                            for (Rect rect : faceDetections.toArray()) {
+                            for (Rect rect : mouthDetections.toArray()) {
                                 Core.rectangle(frame, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
                                         new Scalar(125, 125, 255));
                                 faceX = ((rect.x + rect.width) + rect.x) / 2;
@@ -93,7 +101,7 @@ public class FaceDetection extends javax.swing.JFrame {
 
                             }
                             int i = 0;
-                            for (Rect rect : eyeDetections.toArray()) {
+/*                            for (Rect rect : eyeDetections.toArray()) {
 
                                 Core.rectangle(frame, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height),
                                         new Scalar(255, 255, 125));
@@ -114,7 +122,7 @@ public class FaceDetection extends javax.swing.JFrame {
                                     eyeY = ((rect.y + rect.height) + rect.y) / 2;
                                     System.out.printf("olho direito i= %d %d %d ", i, eyeX, eyeY);
                                     System.out.println();
-
+                                     gravarArq.printf("%f %f %f %f %f %f %n", J1, J2, J3, J4, J5, J6);
                                 }
 
                             }
@@ -127,7 +135,7 @@ public class FaceDetection extends javax.swing.JFrame {
                                 System.out.println();
 
                                 Core.drawMarker(frame, new Point(noseX, noseY), new Scalar(255, 255, 255));
-
+                                 gravarArq.printf("%f %f %f %f %f %f %n", J1, J2, J3, J4, J5, J6);
                             }
                             for (Rect rect : mouthDetections.toArray()) {
 
@@ -140,10 +148,61 @@ public class FaceDetection extends javax.swing.JFrame {
                                 System.out.println();
 
                                 Core.drawMarker(frame, new Point(mouthX, mouthY), new Scalar(255, 255, 255));
+                                 gravarArq.printf("%f %f %f %f %f %f %n", J1, J2, J3, J4, J5, J6);
+                            }*/
 
+                            //**************************Dados Normalizados
+                            J1 = Math.sqrt((Math.pow((eyeY1 - eyeY), 2)) + (Math.pow((eyeX1 - eyeX), 2)));
+                            J2 = Math.sqrt((Math.pow((eyeY1 - faceY), 2)) + (Math.pow((eyeX1 - faceX), 2)));
+                            J3 = Math.sqrt((Math.pow((eyeY - faceY), 2)) + (Math.pow((eyeX - faceX), 2)));
+                            J4 = Math.sqrt((Math.pow((faceY - mouthY), 2)) + (Math.pow((faceX - mouthX), 2)));
+                            J5 = Math.sqrt((Math.pow((eyeY1 - mouthY), 2)) + (Math.pow((eyeX1 - mouthX), 2)));
+                            J6 = Math.sqrt((Math.pow((eyeY - mouthY), 2)) + (Math.pow((eyeX - mouthX), 2)));
+
+                            if (J1 < J2) {
+                                J7 = J1;
+                            } else {
+                                J7 = J2;
+                            }
+                            if (J3 < J7) {
+                                J7 = J3;
+                            }
+                            if (J4 < J7) {
+                                J7 = J4;
+                            }
+                            if (J5 < J7) {
+                                J7 = J5;
+                            }
+                            if (J6 < J7) {
+                                J7 = J6;
                             }
 
-                            gravarArq.printf(" %d %d %d %d %d %d %n", faceX, faceY, (faceX - faceY), eyeX, eyeY, (eyeX - eyeY));
+                            if (J1 > J2) {
+                                J8 = J1;
+                            } else {
+                                J8 = J2;
+                            }
+                            if (J3 > J8) {
+                                J8 = J3;
+                            }
+                            if (J4 > J8) {
+                                J8 = J4;
+                            }
+                            if (J5 > J8) {
+                                J8 = J5;
+                            }
+                            if (J6 > J8) {
+                                J8 = J6;
+                            }
+
+                            J1 = (J1 - J7) / (J8 - J7);
+                            J2 = (J2 - J7) / (J8 - J7);
+                            J3 = (J3 - J7) / (J8 - J7);
+                            J4 = (J4 - J7) / (J8 - J7);
+                            J5 = (J5 - J7) / (J8 - J7);
+                            J6 = (J6 - J7) / (J8 - J7);
+
+                           gravarArq.printf("%f %f %f %f %f %f %n", J1, J2, J3, J4, J5, J6);
                             System.out.print("RostoX - olhoX: ");
                             System.out.println(faceX - faceY);
 
