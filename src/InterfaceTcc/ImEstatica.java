@@ -272,7 +272,7 @@ public class ImEstatica extends JFrame {
                 pnlImagem.setImg("faceDetection.png");
 
             }
-        });
+});
 
         btnVoltar.addActionListener(new ActionListener() {
 
