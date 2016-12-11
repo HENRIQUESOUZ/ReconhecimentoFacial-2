@@ -32,7 +32,7 @@ import org.opencv.objdetect.CascadeClassifier;
 
 /**
  *
- * @author Taha Emara
+ * @author Karla Donza
  */
 public class FaceDetection extends javax.swing.JFrame {
 
